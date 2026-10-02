@@ -1,33 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<!-- מבנה המסך הראשי -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- כפתור הוספת משימה -->
     <Button
         android:id="@+id/btnAddTask"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="הוסף משימה" />
 
+    <!-- תפריט סינון -->
     <Spinner
         android:id="@+id/spinnerFilter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <!-- כפתור סינון משימות -->
     <Button
         android:id="@+id/btnFilter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="סנן משימות" />
 
+    <!-- כפתור הצגת ניקוד -->
     <Button
         android:id="@+id/btnPoints"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="הצג ניקוד" />
 
+    <!-- רשימת המשימות -->
     <ListView
         android:id="@+id/listTasks"
         android:layout_width="match_parent"

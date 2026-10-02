@@ -23,7 +23,9 @@ public class HomeworkTask extends Task {
 
     @Override
     public int getPoints() {
-        return 10 + exercises * 2 + getPriorityBonus();
+        return 10
+                + exercises * 2
+                + getPriorityBonus();
     }
 
     public int getExercises() {
@@ -32,8 +34,8 @@ public class HomeworkTask extends Task {
 
     @Override
     public String toString() {
-        return super.toString() +
-                " | תרגילים: " +
-                exercises;
+        return super.toString()
+                + " | תרגילים: "
+                + exercises;
     }
 }

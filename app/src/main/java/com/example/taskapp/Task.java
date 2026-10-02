@@ -1,7 +1,7 @@
 package com.example.taskapp;
 
+// מחלקת בסיס למשימה רגילה.
 public class Task implements Rewardable {
-
     private int id;
     private String title;
     private String subject;
@@ -9,12 +9,8 @@ public class Task implements Rewardable {
     private String dueDate;
     private boolean done;
 
-    public Task(int id,
-                String title,
-                String subject,
-                String priority,
-                String dueDate) {
-
+    // בנאי שמקבל את פרטי המשימה ומאתחל אותה כלא בוצעה.
+    public Task(int id, String title, String subject, String priority, String dueDate) {
         this.id = id;
         this.title = title;
         this.subject = subject;
@@ -23,77 +19,40 @@ public class Task implements Rewardable {
         this.done = false;
     }
 
-    public String getTypeName() {
-        return "משימה";
-    }
+    // מחזירה את סוג המשימה.
+    public String getTypeName() { return "משימה"; }
 
+    // מחשבת את הנקודות של משימה רגילה.
     @Override
-    public int getPoints() {
-        return 10 + getPriorityBonus();
-    }
+    public int getPoints() { return 10 + getPriorityBonus(); }
 
+    // מחשבת בונוס לפי רמת העדיפות.
     protected int getPriorityBonus() {
-
-        if (priority.equals("גבוהה")) {
-            return 10;
-        }
-
-        if (priority.equals("בינונית")) {
-            return 5;
-        }
-
+        if (priority.equals("גבוהה")) return 10;
+        if (priority.equals("בינונית")) return 5;
         return 0;
     }
 
+    // מחזירה את פרטי המשימה כמחרוזת להצגה ברשימה.
     @Override
     public String toString() {
-
-        String status;
-
-        if (done) {
-            status = "בוצע";
-        } else {
-            status = "לא בוצע";
-        }
-
-        return title +
-                " | " +
-                subject +
-                " | " +
-                priority +
-                " | " +
-                status;
+        return title + " | " + subject + " | " + priority + " | " + dueDate + " | " + (done ? "בוצע" : "לא בוצע");
     }
 
-    public int getId() {
-        return id;
-    }
+    // פעולות שמחזירות את פרטי המשימה.
+    public int getId() { return id; }
+    public String getTitle() { return title; }
+    public String getSubject() { return subject; }
+    public String getPriority() { return priority; }
+    public String getDueDate() { return dueDate; }
+    public boolean isDone() { return done; }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public String getPriority() {
-        return priority;
-    }
-
-    public String getDueDate() {
-        return dueDate;
-    }
-
-    public boolean isDone() {
-        return done;
-    }
-
-    public void setDone(boolean done) {
+    // מעדכנת את מצב המשימה.
+    public void setDone(boolean done)
+    {
         this.done = done;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    // מעדכנת את שם המשימה.
+    public void setTitle(String title) { this.title = title; }
 }

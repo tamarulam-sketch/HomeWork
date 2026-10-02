@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<!-- מבנה מסך הכניסה -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -7,18 +8,21 @@
     android:orientation="vertical"
     android:padding="30dp">
 
+    <!-- שדה הכנסת שם -->
     <EditText
         android:id="@+id/etName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="הכנס שם" />
 
+    <!-- כפתור כניסה -->
     <Button
         android:id="@+id/btnEnter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="כניסה" />
 
+    <!-- כפתור איפוס -->
     <Button
         android:id="@+id/btnReset"
         android:layout_width="match_parent"

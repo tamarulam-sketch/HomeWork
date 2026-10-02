@@ -59,16 +59,9 @@ public class AddTaskActivity extends AppCompatActivity {
                 "מבחן"
         };
 
-        ArrayAdapter<String> typeAdapter =
-                new ArrayAdapter<>(
-                        this,
-                        android.R.layout.simple_spinner_item,
-                        types
-                );
+        ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, types);
 
-        typeAdapter.setDropDownViewResource(
-                android.R.layout.simple_spinner_dropdown_item
-        );
+        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinnerType.setAdapter(typeAdapter);
 
@@ -79,27 +72,16 @@ public class AddTaskActivity extends AppCompatActivity {
         };
 
         ArrayAdapter<String> priorityAdapter =
-                new ArrayAdapter<>(
-                        this,
-                        android.R.layout.simple_spinner_item,
-                        priorities
-                );
+                new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, priorities);
 
-        priorityAdapter.setDropDownViewResource(
-                android.R.layout.simple_spinner_dropdown_item
-        );
+        priorityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinnerPriority.setAdapter(priorityAdapter);
 
-        spinnerType.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
+        spinnerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
                     @Override
-                    public void onItemSelected(
-                            AdapterView<?> parent,
-                            View view,
-                            int position,
-                            long id) {
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                         if (position == 0) {
                             etExtra.setVisibility(View.GONE);
@@ -115,8 +97,8 @@ public class AddTaskActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onNothingSelected(
-                            AdapterView<?> parent) {
+                    public void onNothingSelected(AdapterView<?> parent)
+                    {
                     }
                 }
         );
