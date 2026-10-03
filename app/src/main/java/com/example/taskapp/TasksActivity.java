@@ -1,4 +1,3 @@
-
 package com.example.taskapp;
 
 import android.app.Dialog;
@@ -22,11 +21,9 @@ import java.util.ArrayList;
 public class TasksActivity extends AppCompatActivity {
 
     private ListView listTasks;
-
     private Button btnAddTask;
     private Button btnFilter;
     private Button btnPoints;
-
     private Spinner spinnerFilter;
 
     private ArrayList<Task> tasks;
@@ -48,8 +45,10 @@ public class TasksActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("tasks", MODE_PRIVATE);
 
+        //מכניסה לtaskStorge את אובייקט השמירה
         taskStorage = new TaskStorage(sharedPreferences);
 
+        //טוען את המשימות השמורות ומניס אותם לtasks
         tasks = taskStorage.loadTasks();
 
         //יוצר את הרשימה של המקצועות
@@ -114,9 +113,13 @@ public class TasksActivity extends AppCompatActivity {
         Dialog dialog = new Dialog(TasksActivity.this);
         dialog.setTitle("פרטי משימה");
 
+        //הגדרת מבנה התצוגה
         LinearLayout layout = new LinearLayout(TasksActivity.this);
+
+        //מגדירה שהתצוגה תהיה אנכית
         layout.setOrientation(LinearLayout.VERTICAL);
 
+        // יצירת שדה טקסט להקלדת פרטים
         EditText etDetails = new EditText(TasksActivity.this);
 
         String details =
@@ -128,14 +131,16 @@ public class TasksActivity extends AppCompatActivity {
                         + "\nנקודות: " + task.getPoints()
                         + "\nבוצע: " + (task.isDone() ? "כן" : "לא");
 
-        if (task instanceof HomeworkTask) {
-
+        if (task instanceof HomeworkTask)
+        {
             HomeworkTask homeworkTask = (HomeworkTask) task;
 
             details += "\nמספר תרגילים: "
                     + homeworkTask.getExercises();
 
-        } else if (task instanceof ExamTask) {
+        }
+        else if (task instanceof ExamTask)
+        {
 
             ExamTask examTask = (ExamTask) task;
 
@@ -144,6 +149,8 @@ public class TasksActivity extends AppCompatActivity {
         }
 
         etDetails.setText(details);
+
+        //שהמשתמש לא יוכל לערוך את התוכן בחלון הקטן שקופץ
         etDetails.setEnabled(false);
 
         Button btnDone = new Button(TasksActivity.this);
@@ -155,11 +162,13 @@ public class TasksActivity extends AppCompatActivity {
         Button btnClose = new Button(TasksActivity.this);
         btnClose.setText("סגירה");
 
+      //הוספת הכפתורים ושדה הטקסט למסך
         layout.addView(etDetails);
         layout.addView(btnDone);
         layout.addView(btnDelete);
         layout.addView(btnClose);
 
+        //הצגת העיצוב בתוך החלון הקופץ
         dialog.setContentView(layout);
 
         btnDone.setOnClickListener(new View.OnClickListener() {
@@ -168,10 +177,7 @@ public class TasksActivity extends AppCompatActivity {
 
                 if (task.isDone()) {
                     Toast.makeText(
-                            TasksActivity.this,
-                            "המשימה כבר בוצעה",
-                            Toast.LENGTH_SHORT
-                    ).show();
+                            TasksActivity.this, "המשימה כבר בוצעה", Toast.LENGTH_SHORT).show();
 
                     return;
                 }
@@ -180,10 +186,7 @@ public class TasksActivity extends AppCompatActivity {
                 taskStorage.saveTasks(tasks);
 
                 Toast.makeText(
-                        TasksActivity.this,
-                        "המשימה סומנה כבוצעה",
-                        Toast.LENGTH_SHORT
-                ).show();
+                        TasksActivity.this, "המשימה סומנה כבוצעה", Toast.LENGTH_SHORT).show();
 
                 dialog.dismiss();
                 showTasks();
@@ -216,10 +219,10 @@ public class TasksActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-
         dialog.show();
     }
 
+    //הצגת נקודות (חובת מימוש בגלל הממשק)
     private void showPoints() {
 
         int totalPoints = 0;
@@ -253,19 +256,19 @@ public class TasksActivity extends AppCompatActivity {
 
             String subject = tasks.get(i).getSubject();
 
+            // הוספת המקצוע לרשימה רק אם הוא עדיין לא קיים בה
             if (!subjects.contains(subject)) {
                 subjects.add(subject);
             }
         }
 
-        //לעבור עם צאט גיפיטי
+        // הצגת רשימת המקצועות בתיבת הבחירה
         ArrayAdapter<String> adapter = new ArrayAdapter<>(TasksActivity.this, android.R.layout.simple_spinner_item, subjects);
-
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         spinnerFilter.setAdapter(adapter);
     }
 
+    //הצגת המשימות המתאימות
     private void showTasks() {
 
         displayedTasks = new ArrayList<>();
@@ -274,25 +277,26 @@ public class TasksActivity extends AppCompatActivity {
 
         String selectedSubject = "כל המקצועות";
 
+        //ברגע שמישהו בחר נושא זה הנושא שיהיה
         if (spinnerFilter.getSelectedItem() != null) {
             selectedSubject = spinnerFilter.getSelectedItem().toString();
         }
 
-        for (int i = 0; i < tasks.size(); i++) {
+        for (int i = 0; i < tasks.size(); i++)
+        {
 
             Task task = tasks.get(i);
 
-            if (selectedSubject.equals("כל המקצועות")
-                    || task.getSubject().equals(selectedSubject)) {
-
+            if (selectedSubject.equals("כל המקצועות") || task.getSubject().equals(selectedSubject))
+            {
                 displayedTasks.add(task);
 
-                taskTexts.add(
-                        task.getTypeName() + " | " + task.toString()
-                );
+                //יוצא את הטקסט שיוצג עבור המשימה
+                taskTexts.add(task.getTypeName() + " | " + task.toString());
             }
         }
 
+        //יוצרים ArrayAdapter שתפקידו ללבר בין רשימת הטקסטים לבין רכיב התצוגה
         ArrayAdapter<String> adapter = new ArrayAdapter<>(TasksActivity.this,
                 android.R.layout.simple_list_item_1, taskTexts);
 

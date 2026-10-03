@@ -26,10 +26,10 @@ public class MainActivity extends AppCompatActivity {
 
         LinearLayout layout = new LinearLayout(this);
 
-        layout.setOrientation(
-                LinearLayout.VERTICAL
-        );
+        //קובע שהריכיבים יסודרו אחד אחרי השני
+        layout.setOrientation(LinearLayout.VERTICAL);
 
+        //קובע את הרווח בין התוכן לצדדים של המסך
         layout.setPadding(
                 30,
                 30,
@@ -49,19 +49,25 @@ public class MainActivity extends AppCompatActivity {
 
         btnReset.setText("איפוס");
 
+        //הוספת הרכיבים לlayout
         layout.addView(etName);
         layout.addView(btnLogin);
         layout.addView(btnReset);
 
+        //מציג את מה שהכנסו לlayout כך שהמתמש יוכל לראות
         setContentView(layout);
 
+        // טעינת שם המשתמש שנשמר בעבר
         sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
 
+        //קריאת שםהמתמש שנשמק תחת username
         String savedName = sharedPreferences.getString("username", "");
 
+        //כל עוד השדה של השם לא ריק תשמור את השם שהוכנס
         if (!savedName.equals("")) {
             etName.setText(savedName);
         }
+
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -75,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
                             return;
                         }
 
+                        //שומרת את הערך name תחת המפתח username
                         sharedPreferences.edit().putString("username", name).apply();
 
                         Intent intent = new Intent(MainActivity.this, TasksActivity.class);
@@ -110,16 +117,12 @@ public class MainActivity extends AppCompatActivity {
         message.setEnabled(false);
 
         Button btnYes = new Button(MainActivity.this);
-
         btnYes.setText("כן");
 
-        Button btnNo =
-                new Button(
-                        MainActivity.this
-                );
-
+        Button btnNo = new Button(MainActivity.this);
         btnNo.setText("לא");
 
+        //הוספת הרכיבים לlayout
         layout.addView(message);
         layout.addView(btnYes);
         layout.addView(btnNo);
@@ -130,11 +133,14 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
 
+                        //מוחק את כל הנתונים השמורים בקובץ
                         sharedPreferences.edit().clear().apply();
-                        SharedPreferences tasksPreferences =
-                                getSharedPreferences("tasks", MODE_PRIVATE);
+
+                        //שומר את הגישה לקובץ במשתנה tasksPreferences
+                        SharedPreferences tasksPreferences = getSharedPreferences("tasks", MODE_PRIVATE);
 
                         tasksPreferences.edit().clear().apply();
+
                         etName.setText("");
 
                         Toast.makeText(MainActivity.this, "הנתונים אופסו", Toast.LENGTH_SHORT).show();

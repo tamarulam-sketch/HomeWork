@@ -19,14 +19,14 @@ public class Task implements Rewardable {
         this.done = false;
     }
 
-    // מחזירה את סוג המשימה.
+    // מחזירה את סוג המשימה
     public String getTypeName() { return "משימה"; }
 
-    // מחשבת את הנקודות של משימה רגילה.
+    // מחשבת את הנקודות של משימה רגילה
     @Override
     public int getPoints() { return 10 + getPriorityBonus(); }
 
-    // מחשבת בונוס לפי רמת העדיפות.
+    // מחשבת בונוס לפי רמת העדיפות
     protected int getPriorityBonus() {
         if (priority.equals("גבוהה")) return 10;
         if (priority.equals("בינונית")) return 5;

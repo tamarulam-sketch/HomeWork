@@ -38,7 +38,6 @@ public class AddTaskActivity extends AppCompatActivity {
 
         spinnerType = findViewById(R.id.spinnerType);
         spinnerPriority = findViewById(R.id.spinnerPriority);
-
         etTitle = findViewById(R.id.etTitle);
         etSubject = findViewById(R.id.etSubject);
         etDueDate = findViewById(R.id.etDueDate);
@@ -47,37 +46,38 @@ public class AddTaskActivity extends AppCompatActivity {
         btnSave = findViewById(R.id.btnSave);
         btnCancel = findViewById(R.id.btnCancel);
 
-        SharedPreferences prefs =
-                getSharedPreferences("tasks", MODE_PRIVATE);
+        //טעינת המשימות השמורות
+        SharedPreferences prefs = getSharedPreferences("tasks", MODE_PRIVATE);
 
         taskStorage = new TaskStorage(prefs);
         tasks = taskStorage.loadTasks();
 
+        //הגדרת אפשרויות סוג המשימה (נמצא במערך)
         String[] types = {
                 "משימה",
                 "שיעורי בית",
                 "מבחן"
         };
 
+        //יצירת ArrayAdapter שמחבר בין המערך type לבין הSpinner, כדי שהמשתמש יוכל לבחור סוג משימה מהרשימה
         ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, types);
-
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         spinnerType.setAdapter(typeAdapter);
 
+
+        //הגדרת רמת עדיפות
         String[] priorities = {
                 "נמוכה",
                 "בינונית",
                 "גבוהה"
         };
 
-        ArrayAdapter<String> priorityAdapter =
-                new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, priorities);
-
+        //מחבר בין המערך לספינר כדי שהמשתמש יוכל לבחור רמת עדיפות
+        ArrayAdapter<String> priorityAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, priorities);
         priorityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         spinnerPriority.setAdapter(priorityAdapter);
 
+        //הפעולה בודקת איזה משימה המשתמש בחר ומתאימה את שדה המידע בהתאם
         spinnerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
                     @Override
@@ -85,17 +85,21 @@ public class AddTaskActivity extends AppCompatActivity {
 
                         if (position == 0) {
                             etExtra.setVisibility(View.GONE);
-                        } else {
+                        }
+                        else {
                             etExtra.setVisibility(View.VISIBLE);
 
-                            if (position == 1) {
+                            if (position == 1)
+                            {
                                 etExtra.setHint("מספר תרגילים");
-                            } else {
+                            }
+                            else {
                                 etExtra.setHint("מספר נושאים");
                             }
                         }
                     }
 
+                    //פעולה שמתבצעת כשלא נבחרה אפשרות ב־Spinner. במקרה הזה לא קורה כלום (חובת שימוש בגלל ממשק)
                     @Override
                     public void onNothingSelected(AdapterView<?> parent)
                     {
@@ -103,30 +107,21 @@ public class AddTaskActivity extends AppCompatActivity {
                 }
         );
 
+        //מה שיקרה אם אלחץ על הכפתורים
         btnSave.setOnClickListener(v -> saveTask());
 
         btnCancel.setOnClickListener(v -> finish());
     }
 
+    //הפעולה קוראת את הנתונים שהמשתמש הזין ושומרת אותם במשתנים
     private void saveTask() {
 
-        String type =
-                spinnerType.getSelectedItem().toString();
-
-        String title =
-                etTitle.getText().toString().trim();
-
-        String subject =
-                etSubject.getText().toString().trim();
-
-        String priority =
-                spinnerPriority.getSelectedItem().toString();
-
-        String dueDate =
-                etDueDate.getText().toString().trim();
-
-        String extraText =
-                etExtra.getText().toString().trim();
+        String type = spinnerType.getSelectedItem().toString();
+        String title = etTitle.getText().toString().trim();
+        String subject = etSubject.getText().toString().trim();
+        String priority = spinnerPriority.getSelectedItem().toString();
+        String dueDate = etDueDate.getText().toString().trim();
+        String extraText = etExtra.getText().toString().trim();
 
         if (title.isEmpty()) {
             etTitle.setError("יש להכניס שם משימה");
@@ -143,6 +138,7 @@ public class AddTaskActivity extends AppCompatActivity {
             return;
         }
 
+        //יצירת ID לכל משתנה למתרת זיהוי
         int id = getNextId();
         Task newTask;
 
@@ -155,6 +151,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
             int exercises;
 
+            //אם הכנסתי משהו שלא יכול להיות מומר לINT תציג שגיאה-
             try {
                 exercises = Integer.parseInt(extraText);
             } catch (NumberFormatException e) {
@@ -220,17 +217,12 @@ public class AddTaskActivity extends AppCompatActivity {
         tasks.add(newTask);
         taskStorage.saveTasks(tasks);
 
-        Toast.makeText(
-                this,
-                "נשמר! המשימה שווה "
-                        + newTask.getPoints()
-                        + " נקודות!!",
-                Toast.LENGTH_LONG
-        ).show();
+        Toast.makeText(this, "נשמר! המשימה שווה " + newTask.getPoints() + " נקודות!!", Toast.LENGTH_LONG).show();
 
         finish();
     }
 
+    //קביעת ID לטאסק
     private int getNextId() {
 
         int biggestId = 0;
