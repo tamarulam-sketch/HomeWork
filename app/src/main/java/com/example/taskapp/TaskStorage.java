@@ -1,3 +1,4 @@
+
 package com.example.taskapp;
 
 import android.content.SharedPreferences;
@@ -12,10 +13,11 @@ import java.util.ArrayList;
 
 public class TaskStorage {
 
-    //מגדיר קבוע בשם KEY_TASKS שערכו tasks
+    // מגדיר קבוע שמכיל את השם שבו נשמרות המשימות
     private static final String KEY_TASKS = "tasks";
 
     private SharedPreferences sharedPreferences;
+
     private Gson gson;
 
     public TaskStorage(SharedPreferences sharedPreferences) {
@@ -24,29 +26,35 @@ public class TaskStorage {
         this.gson = new Gson();
     }
 
+    // פעולה שטוענת את המשימות השמורות ומחזירה אותן ברשימה
     public ArrayList<Task> loadTasks() {
 
         ArrayList<Task> tasks = new ArrayList<>();
 
-        String json =
-                sharedPreferences.getString(KEY_TASKS, "");
+        // קוראת את הנתונים השמורים תחת המפתח KEY_TASKS
+        String json = sharedPreferences.getString(KEY_TASKS, "");
 
+        // אם אין נתונים שמורים, מחזירה רשימה ריקה
         if (json.equals("")) {
             return tasks;
         }
 
         try {
 
+            // ממירה את מחרוזת ה-JSON למערך של נתונים
             JsonArray array = new JsonParser().parse(json).getAsJsonArray();
 
+            // עוברת על כל משימה שנמצאת במערך ה-JSON
             for (JsonElement element : array) {
 
+                // הופכת את הנתונים של המשימה לאובייקט JSON
                 JsonObject object = element.getAsJsonObject();
 
                 String type = object.get("type").getAsString();
 
                 Task task;
 
+                // קוראת את מזהה המשימה
                 int id = object.get("id").getAsInt();
 
                 String title = object.get("title").getAsString();
@@ -59,8 +67,10 @@ public class TaskStorage {
 
                 if (type.equals("HomeworkTask")) {
 
+                    //שומר את מספר התרגילים כאינט
                     int exercises = object.get("exercises").getAsInt();
 
+                    // יוצרת אובייקט מסוג HomeworkTask עם הנתונים שנקראו
                     task = new HomeworkTask(
                             id,
                             title,
@@ -70,7 +80,8 @@ public class TaskStorage {
                             exercises
                     );
 
-                } else if (type.equals("ExamTask")) {
+                }
+                else if (type.equals("ExamTask")) {
 
                     int topics = object.get("topics").getAsInt();
 
@@ -83,7 +94,8 @@ public class TaskStorage {
                             topics
                     );
 
-                } else {
+                }
+                else {
 
                     task = new Task(
                             id,
@@ -94,29 +106,36 @@ public class TaskStorage {
                     );
                 }
 
+                // קוראת האם המשימה כבר הושלמה
                 boolean done = object.get("done").getAsBoolean();
 
                 task.setDone(done);
-
                 tasks.add(task);
             }
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
 
+            // אם מתרחשת שגיאה בקריאת הנתונים, מחזירה רשימה ריקה
             return new ArrayList<>();
         }
 
         return tasks;
     }
 
+    // פעולה שמקבלת רשימת משימות ושומרת אותה במכשיר
     public void saveTasks(ArrayList<Task> tasks) {
 
+        // יוצרת מערך JSON שאליו יוכנסו נתוני המשימות
         JsonArray array = new JsonArray();
 
+        // עוברת על כל המשימות ברשימה
         for (Task task : tasks) {
 
+            // יוצרת אובייקט JSON עבור המשימה הנוכחית
             JsonObject object = new JsonObject();
 
+            // מוסיפה את מזהה המשימה לנתונים
             object.addProperty("id", task.getId());
 
             object.addProperty("title", task.getTitle());
@@ -133,6 +152,7 @@ public class TaskStorage {
 
                 HomeworkTask homeworkTask = (HomeworkTask) task;
 
+                // שומרת את סוג המשימה
                 object.addProperty("type", "HomeworkTask");
 
                 object.addProperty("exercises", homeworkTask.getExercises());
@@ -142,20 +162,23 @@ public class TaskStorage {
 
                 ExamTask examTask = (ExamTask) task;
 
+                // שומרת את סוג המשימה
                 object.addProperty("type", "ExamTask");
 
                 object.addProperty("topics", examTask.getTopics());
 
             }
-            else
-            {
+            else {
 
                 object.addProperty("type", "Task");
             }
 
+            // מוסיפה את אובייקט המשימה למערך ה-JSON
             array.add(object);
         }
 
+        // ממירה את מערך ה JSON למחרוזת ושומרת אותה במכשיר
+        // זה שומר את השינוי באופן אסינכרוני (במקביל)
         sharedPreferences.edit().putString(KEY_TASKS, gson.toJson(array)).apply();
     }
 }

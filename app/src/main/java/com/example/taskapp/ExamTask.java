@@ -16,9 +16,7 @@ public class ExamTask extends Task {
 
     @Override
     public int getPoints() {
-        return 20
-                + topics * 3
-                + getPriorityBonus();
+        return 20 + topics * 3 + getPriorityBonus();
     }
 
     public int getTopics() {
@@ -27,8 +25,6 @@ public class ExamTask extends Task {
 
     @Override
     public String toString() {
-        return super.toString()
-                + " | נושאים: "
-                + topics;
+        return super.toString() + " | נושאים: " + topics;
     }
 }
