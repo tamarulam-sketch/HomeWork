@@ -155,7 +155,6 @@ public class TaskDetailsActivity extends AppCompatActivity {
         );
 
 
-        // לחיצה על חזרה
         btnBack.setOnClickListener(new View.OnClickListener() {
 
                     @Override
