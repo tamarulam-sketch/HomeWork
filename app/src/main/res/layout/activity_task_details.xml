@@ -42,6 +42,7 @@
         android:layout_height="wrap_content"
         android:text="מחיקה" />
 
+
     <!-- כפתור חזרה -->
     <Button
         android:id="@+id/btnBack"
