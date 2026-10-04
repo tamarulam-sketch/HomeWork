@@ -203,7 +203,8 @@ public class AddTaskActivity extends AppCompatActivity {
                     topics
             );
 
-        } else {
+        }
+        else {
 
             newTask = new Task(
                     id,

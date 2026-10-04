@@ -54,13 +54,13 @@ public class MainActivity extends AppCompatActivity {
         layout.addView(btnLogin);
         layout.addView(btnReset);
 
-        //מציג את מה שהכנסו לlayout כך שהמתמש יוכל לראות
+        //מציג את מה שהכנסו לlayout כך שהמשתמש יוכל לראות
         setContentView(layout);
 
         // טעינת שם המשתמש שנשמר בעבר
         sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
 
-        //קריאת שםהמתמש שנשמק תחת username
+        //קריאת שםהמתמש שנשמר תחת username
         String savedName = sharedPreferences.getString("username", "");
 
         //כל עוד השדה של השם לא ריק תשמור את השם שהוכנס
