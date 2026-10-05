@@ -1,5 +1,6 @@
 package com.example.taskapp;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -58,6 +60,8 @@ public class TasksActivity extends AppCompatActivity {
             }
         });
 
+
+
         btnFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,6 +89,18 @@ public class TasksActivity extends AppCompatActivity {
                 intent.putExtra("taskId", task.getId());
 
                 startActivity(intent);
+            }
+        });
+
+        listTasks.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Task task = displayedTasks.get(position);
+
+                showDeleteDialog(task);
+
+                return true;
             }
         });
     }
@@ -134,6 +150,47 @@ public class TasksActivity extends AppCompatActivity {
                 Toast.LENGTH_LONG).show();
     }
 
+    // פעולה שפותחת חלון למחיקת משימה
+    private void showDeleteDialog(Task task) {
+        Dialog dialog = new Dialog(TasksActivity.this);
+
+        dialog.setTitle("מחיקת משימה");
+
+        LinearLayout layout = new LinearLayout(TasksActivity.this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        Button btnDelete = new Button(TasksActivity.this);
+        btnDelete.setText("מחיקה");
+
+        Button btnCancel = new Button(TasksActivity.this);
+        btnCancel.setText("ביטול");
+
+        layout.addView(btnDelete);
+        layout.addView(btnCancel);
+
+        dialog.setContentView(layout);
+
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tasks.remove(task);
+                taskStorage.saveTasks(tasks);
+                setupFilter();
+                showTasks();
+                dialog.dismiss();
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
     // הכנת הסינון לפי מקצוע
     private void setupFilter() {
         ArrayList<String> subjects = new ArrayList<>();
@@ -151,7 +208,7 @@ public class TasksActivity extends AppCompatActivity {
 
         //לוקח את הנתונים שנמצאים ב subjects ומחבר אותם לספינר כדי להציג אותם
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                TasksActivity.this, android.R.layout.simple_spinner_item, subjects  );
+                TasksActivity.this, android.R.layout.simple_spinner_item, subjects);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -169,7 +226,7 @@ public class TasksActivity extends AppCompatActivity {
 
         String selectedSubject = "כל המקצועות";
 
-       //לבדוק איזה מקצוע המשתמש בחר באופציות של המקצועות
+        //לבדוק איזה מקצוע המשתמש בחר באופציות של המקצועות
         if (spinnerFilter.getSelectedItem() != null) {
             selectedSubject = spinnerFilter.getSelectedItem().toString();
         }

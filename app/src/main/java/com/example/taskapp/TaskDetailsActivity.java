@@ -42,8 +42,6 @@ public class TaskDetailsActivity extends AppCompatActivity {
         // יצירת אובייקט שאחראי על שמירת המשימות
         taskStorage = new TaskStorage(sharedPreferences);
 
-
-        // טעינת המשימות
         tasks = taskStorage.loadTasks();
 
         // קבלת ה-ID שנשלח מ-TasksActivity
